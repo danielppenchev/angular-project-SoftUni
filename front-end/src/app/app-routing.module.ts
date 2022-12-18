@@ -31,11 +31,13 @@ const routes: Routes = [
   },
   {
     path: 'add-product',
-    component: AddProductComponent
+    component: AddProductComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'cart-page',
-    component: CartPageComponent
+    component: CartPageComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'checkout-page',
@@ -57,11 +59,13 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    component: ProfileComponent
+    component: ProfileComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'edit-profile',
-    component: ProfileEditComponent
+    component: ProfileEditComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

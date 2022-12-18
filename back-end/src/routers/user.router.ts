@@ -25,7 +25,7 @@ router.post("/login", asyncHandler(
     async (req, res) => {
         const { email, password } = req.body;
         const user = await UserModel.findOne({ email });
-        
+
         if (user) {
             const encryptedPassword = user!.password;
             const isAuthorized = await bcrypt.compare(password, encryptedPassword);
@@ -64,6 +64,24 @@ router.post("/register", asyncHandler(
     }
 ))
 
+router.put("/edit", asyncHandler(
+    async (req, res) => {
+        const { name, email, password, address } = req.body;
+        await UserModel.findByIdAndDelete(req.params.id); 
+        const encryptedPassword = await bcrypt.hash(password, 10);
+        const newUser: User = {
+            id: '',
+            name,
+            email,
+            password: encryptedPassword,
+            address,
+            isAdmin: false
+        }
+        const dbUser = await UserModel.create(newUser);
+        res.send(generateTokenResponse(dbUser));
+    }
+))
+
 const generateTokenResponse = (user: any) => {
     const token = jwt.sign({
         id: user.id,
@@ -72,7 +90,7 @@ const generateTokenResponse = (user: any) => {
     }, "jwtsecret123", {
         expiresIn: "30d"
     });
-    
+
     return {
         id: user.id,
         email: user.email,

@@ -1,17 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { Observable, tap } from 'rxjs';
 import { PRODUCTS_BY_ID_URL, PRODUCTS_BY_SEARCH_URL, PRODUCTS_BY_TAG_URL, PRODUCTS_TAGS_URL, PRODUCTS_URL } from '../shared/constants/urls';
 import { INewProduct } from '../shared/interfaces/INewProduct';
 import { Product } from '../shared/models/Product';
 import { Tag } from '../shared/models/Tag';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: UserService, private toastrService: ToastrService) {}
 
   getAll(): Observable<Product[]> {
     return this.http.get<Product[]>(PRODUCTS_URL);
@@ -33,8 +35,21 @@ export class ProductService {
     return this.http.get<Product>(PRODUCTS_BY_ID_URL + productId);
   }
 
-  addProduct(product: INewProduct): Observable<INewProduct> {
-    return this.http.post<INewProduct>(PRODUCTS_URL, product);
+  addProduct(product: INewProduct): Observable<Product> {
+    return this.http.post<Product>(PRODUCTS_URL + '/add', product).pipe(
+      tap({
+        next: (product) => {
+          const user = this.userService.currentUser;
+          this.toastrService.success(
+            `Well done, ${user.name}!`,
+            `${product.name} added successfully!`
+          )
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Operation Failed!');
+        }
+      })
+    )
   }
 
   deleteItem(product: Product): Observable<Product> {

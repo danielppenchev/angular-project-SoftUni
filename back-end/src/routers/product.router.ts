@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import asyncHandler from 'express-async-handler'
+import { HTTP_BAD_REQUEST } from '../constants/http_status';
 import { sample_products, sample_tags } from '../data';
-import { ProductModel } from '../models/product.model';
+import { Product, ProductModel } from '../models/product.model';
 import { UserModel } from '../models/user.model';
 
 const router = Router();
@@ -43,7 +44,7 @@ router.get("/tags", asyncHandler(
             {
                 $group: {
                     _id: '$tags',
-                    count: { $sum: 1}
+                    count: { $sum: 1 }
                 }
             },
             {
@@ -85,10 +86,34 @@ router.get("/:id/delete", async (req, res) => {
     const isAdmin = user && user.hasOwnProperty('isAdmin')
 
     if (product && isAdmin) {
-      await ProductModel.findByIdAndDelete(req.params.id);
+        await ProductModel.findByIdAndDelete(req.params.id);
     }
-  
-    res.redirect("/");
-  });
+
+});
+
+router.post("/add", asyncHandler(
+    async (req, res) => {
+        const { name, price, tags, stars, imageUrl, origins, cookTime } = req.body;
+        const product = await ProductModel.findOne({ name });
+        if (product) {
+            res.status(HTTP_BAD_REQUEST).send("Product already exists with this name! Try again!");
+            return;
+        } else {
+            const newProduct: Product = {
+                id: '',
+                name,
+                price,
+                tags,
+                favorite: false,
+                stars,
+                imageUrl,
+                origins,
+                cookTime
+            }
+            const dbProduct = await ProductModel.create(newProduct);
+            res.send(dbProduct);
+        }
+    }
+))
 
 export default router;

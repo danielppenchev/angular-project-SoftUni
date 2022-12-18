@@ -62,13 +62,13 @@ export class UserService {
   }
 
   updateUser(userRegister: IUserRegister): Observable<User> {
-    return this.http.put<User>(USER_URL, userRegister).pipe(
+    return this.http.put<User>(USER_URL + '/edit', userRegister).pipe(
       tap({
         next: (user) => {
           this.setUserToLocalStorage(user);
           this.userSubject.next(user);
           this.toastrService.success(
-            `Welcome to my online shop, ${user.name}!`,
+            `Welcome back to my online shop, ${user.name}!`,
             'Changes applied successfully!'
           )
         },
