@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="content">
+        <app-title title="Profile Summary" fontSize="1.6rem"></app-title>
+        <div class="summary">
+            <div>
+                <h3>Name:</h3>
+                <span>{{user.name}}</span>
+            </div>
+            <div>
+                <h3>Email:</h3>
+                <span>{{user.email}}</span>
+            </div>
+            <div>
+                <h3>Address:</h3>
+                <span>{{user.address}}</span>
+            </div>
+        </div>
+    </div>
+    <button (click)="editProfile()">Edit Your Profile</button>
+</div>

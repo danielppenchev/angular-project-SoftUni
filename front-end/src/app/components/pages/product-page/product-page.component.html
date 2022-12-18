@@ -1,0 +1,39 @@
+<app-not-found [visible]="!product" notFoundMessage="Product Not Found" resetLinkText="Back to Homepage"></app-not-found>
+<div *ngIf="product" class="container">
+    <img [src]="product.imageUrl" [alt]="product.name">
+    <div class="details">
+        <div class="header">
+            <span class="name">
+                {{product.name}}
+            </span>
+            <span class="favorite {{product.favorite? '' : 'not'}}">❤</span>
+        </div>
+        <div class="rating">
+            <ngb-rating [readonly]="true" [(rate)]="product.stars">
+                <ng-template let-fill="fill" >
+                  <span [class.filled]="fill === 100" [class.notfilled]="fill === 0">★</span>
+                </ng-template>
+              </ngb-rating>
+        </div>
+        <div class="origins">
+            <span *ngFor="let origin of product.origins">
+                {{origin}}
+            </span>
+        </div>
+        <div class="tags">
+            <a *ngFor="let tag of product.tags" routerLink="/tag/{{tag}}">{{tag}}</a>
+        </div>
+        <div class="cook-time">
+            <span>
+                Time to cook: about <strong>{{product.cookTime}}</strong> minutes
+            </span>
+        </div>
+        <div class="price">
+            <span>
+                {{product.price | currency}}
+            </span>
+        </div>
+        <button *ngIf="isAuth" (click)="addToCart()">Add To Cart</button>
+        <button *ngIf="isAdmin" (click)="deleteItem()">Delete Item</button>
+    </div>
+</div>

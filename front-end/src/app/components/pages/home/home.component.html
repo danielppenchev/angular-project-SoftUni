@@ -1,0 +1,39 @@
+<app-search></app-search>
+<app-tags></app-tags>
+<app-not-found [visible]="!products || !products.length" resetLinkText="Reset Search"></app-not-found>
+<ul>
+    <li *ngFor="let product of products">
+        <a routerLink="/product/{{product.id}}">
+            <img [src]="product.imageUrl" [alt]="product.name">
+            <div class="content">
+                <div class="name">
+                    {{product.name}}
+                </div>
+                <span class="favorite {{product.favorite?'':'not'}}">❤</span>
+                <div class="stars">
+                    <ngb-rating [readonly]="true" [(rate)]="product.stars">
+                        <ng-template let-fill="fill" >
+                          <span [class.filled]="fill === 100" [class.notfilled]="fill === 0">★</span>
+                        </ng-template>
+                      </ngb-rating>
+                </div>
+                <div class="product-item-footer">
+                    <div class="origins">
+                        <span *ngFor="let origin of product.origins">
+                            {{origin}}
+                        </span>
+                    </div>
+                    <div class="cook-time">
+                        <span>🕑</span>
+                        {{product.cookTime}}
+                    </div>
+                    <div class="price">
+                        <span>
+                            {{product.price | currency}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </li>
+</ul>

@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="details">
+        <app-title title="Add New Product"></app-title>
+        <form [formGroup]="newProductForm" (ngSubmit)="submit()">
+            <text-input [control]="fc.name" [showErrorsWhen]="isSubmitted" label="Name"></text-input>
+            <text-input [control]="fc.price" [showErrorsWhen]="isSubmitted" label="Price"></text-input>
+            <text-input [control]="fc.tags" [showErrorsWhen]="isSubmitted" label="Tags"></text-input>
+            <text-input [control]="fc.stars" [showErrorsWhen]="isSubmitted" label="Star Count"></text-input>
+            <text-input [control]="fc.imageUrl" [showErrorsWhen]="isSubmitted" label="Image Url"></text-input>
+            <text-input [control]="fc.origins" [showErrorsWhen]="isSubmitted" label="Origins"></text-input>
+            <text-input [control]="fc.cookTime" [showErrorsWhen]="isSubmitted" label="Cook Time"></text-input>
+            <default-button>Add Product</default-button>
+        </form>
+    </div>
+</div>
+
